@@ -1,0 +1,60 @@
+﻿Average number of retransmits 
+
++---------+-------------+-------------+-------------+--------------------+
+|         |             |             |             |                    |
+| P Value | First       | Second      | Third       | Average number of  |
+|         | Observation | Observation | Observation | retransmits        |
+|         |             |             |             |         		 |
++---------+-------------+-------------+-------------+--------------------+
+| 0.05    | 10          | 7           | 10          | 9                  |
++---------+-------------+-------------+-------------+--------------------+
+| 0.1     | 28          | 24          | 16          | 22.6666666667      |
++---------+-------------+-------------+-------------+--------------------+
+| 0.15    | 38          | 54          | 35          | 42.3333333333      |
++---------+-------------+-------------+-------------+--------------------+
+| 0.2     | 73          | 58          | 63          | 64.6666666667      |
++---------+-------------+-------------+-------------+--------------------+
+| 0.25    | 92          | 78          | 85          | 85                 |
++---------+-------------+-------------+-------------+--------------------+
+| 0.3     | 102         | 111         | 134         | 115.6666666667     |
++---------+-------------+-------------+-------------+--------------------+
+| 0.35    | 121         | 143         | 135         | 133                |
++---------+-------------+-------------+-------------+--------------------+
+| 0.4     | 180         | 187         | 171         | 179.3333333333     |
++---------+-------------+-------------+-------------+--------------------+
+| 0.45    | 229         | 240         | 211         | 226.6666666667     |
++---------+-------------+-------------+-------------+--------------------+
+| 0.5     | 293         | 255         | 281         | 276.3333333333     |
++---------+-------------+-------------+-------------+--------------------+
+	
+
+The string which was transmitted had a length of 100 characters. The above values denote number of retransmits incurred on the sender side for transferring the 100 messages.  
+
+
+List of Messages
+
+Application Message - First byte contains the letter 'm'(to denote application message as it's type), next four bytes contain the unique id of the transferring message. Remaining bytes contain the original application message which was sent by the user.  
+
+
+Acknowledgement Message - First byte contains the letter 'a'(to denote acknowledgement message as it's type), next four byte contain the unique id of the transferred message.
+
+
+List of data structures
+
+unacknowledged_message_table - List of messages for which acknowledgement isn't yet received. It is an array of struct which stores information about unacknowledged messages indexed by the message_id. 
+message_id: unique id of the message transferred, 
+message_len: length of the message transferred, 
+last_send_time: Time of sending the message, 
+message: Message sent by the user, 
+destination_ip_port: struct sockaddr of the server,
+
+
+receive_buffer - Buffer to store all received messages from the sender. It is implemented as a queue where received messages are pushed and popped when user executes r_recvfrom call.
+message: Message sent by the user, 
+message_id: unique id of the message transferred, 
+message_len: length of the message transferred.
+
+
+receive_message_id - It indicates all messages received hashed by the message_id of the received message. 
+message_id: unique id of the message transferred, 
+valid_bit: to denote if the message is received or not.
